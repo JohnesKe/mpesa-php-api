@@ -1,1 +1,1 @@
-"# mpesa-php-api" 
+"# M-pesa PHP API Implemented using guzzlehttp" 
