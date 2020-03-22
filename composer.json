@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-          "JohnesKeMpesaPhpApi": "src/",
+          "JohnesKeMpesaPhpApi\\": "src/",
           "JohnesKeMpesaPhpApi\\Tests\\": "tests"
       }
   }
