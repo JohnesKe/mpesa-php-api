@@ -2,7 +2,7 @@
 require '../vendor/autoload.php';
 require 'config.php';
 
-use JohnesKeMpesaPhpApi\Mpesa;
+use JohnesKe\MpesaPhpApi\Mpesa;
 
 $mpesa = new Mpesa(MPESA_ENV, MPESA_CONSUMER_KEY , MPESA_CONSUMER_SECRET);
 

@@ -1,5 +1,5 @@
 <?php
-namespace JohnesKeMpesaPhpApi;
+namespace JohnesKe\MpesaPhpApi;
 
 use GuzzleHttp\Client;
 
