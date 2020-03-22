@@ -1,5 +1,5 @@
 {
-    "name": "JohnesKe/mpesa-php-api",
+    "name": "johnes-ke/mpesa-php-api",
     "description": "M-pesa PHP API Implemented using guzzlehttp",
     "keywords": ["stk", "b2c", "b2b", "c2b", "mpesaphp", "mpesaapi"],
     "homepage": "http://johnestech.com/mpesa-php-api",
