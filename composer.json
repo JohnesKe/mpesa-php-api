@@ -1,6 +1,6 @@
 {
     "name": "johnes-ke/mpesa-php-api",
-    "description": "M-pesa PHP API Implemented using guzzlehttp",
+    "description": "M-pesa PHP API Implemented using guzzlehttp library",
     "keywords": [
         "mpesa",
         "mpesaapi"
@@ -18,8 +18,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "guzzlehttp/guzzle": "^6.2",
-        "illuminate/support": "v7.6.2"
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0"
