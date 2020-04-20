@@ -27,7 +27,7 @@ class Stk
     public function __construct($stkClient,$stkUrl,$businessShortCode,
                        $lipaNaMpesaPassKey,$transactionType,
                        $amount,$partyA,$partyB,$phoneNumber,
-                       $callBackUrl,$accountReference,$transactionDescription,
+                       $callBackUrl,$accountReference,$trxDescription,
                        $remarks){
 
         $this->stkClient              = $stkClient;
@@ -41,7 +41,7 @@ class Stk
         $this->phoneNumber            = $phoneNumber;
         $this->callBackUrl            = $callBackUrl;
         $this->accountReference       = $accountReference;
-        $this->$transactionDescription = $transactionDescription;
+        $this->transactionDescription = $trxDescription;
         $this->remarks                = $remarks;
 
     }
@@ -51,7 +51,7 @@ class Stk
        try {
                     
             $timestamp ='20'.date("ymdhis");
-        
+
             $password  = base64_encode(
                                        $this->businessShortCode.
                                        $this->lipaNaMpesaPassKey.
@@ -73,10 +73,9 @@ class Stk
                 'Remark'           => $this->remarks
             );
 
-            
-            echo $data_string = json_encode($Data);
+            $data_string = json_encode($Data);
 
-            $response = $this->stkClient->post( $this->stkUrl, ['form_params' => $data_string ] );
+            $response = $this->stkClient->post( $this->stkUrl, ['body' => $data_string ] );
 
             $resp = $response->getBody()->getContents();
 
@@ -89,8 +88,8 @@ class Stk
 
         } catch(\Exception $e){
           // recover + slightly different log with monolog
-          echo Psr7\str($e->getRequest());
-          echo Psr7\str($e->getResponse());
+          echo $e->getMessage();
+
         }    
         
     }
