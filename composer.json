@@ -1,9 +1,9 @@
 {
     "name": "johnes-ke/mpesa-php-api",
-    "description": "M-pesa PHP API Implemented using guzzlehttp library",
+    "description": "Laravel Mpesa Php Api library",
     "keywords": [
         "mpesa",
-        "mpesaapi"
+        "mpesa-api"
     ],
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",

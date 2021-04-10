@@ -2,13 +2,13 @@
 require '../vendor/autoload.php';
 require 'config.php';
 
-use JohnesKe\MpesaPhpApi\Mpesa;
+use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-$mpesa = new Mpesa( MPESA_ENV,MPESA_CONSUMER_KEY,MPESA_CONSUMER_SECRET );
+$mpesa = new MpesaPhpApi( MPESA_ENV,MPESA_CONSUMER_KEY,MPESA_CONSUMER_SECRET );
 
 $token = $mpesa->token();
 
-echo "Mpesa Token --> ".$token;
+echo "MpesaPhpApi Token --> ".$token;
 echo "<br/>";
 
 $stkResponse = $mpesa->stkRequest( 

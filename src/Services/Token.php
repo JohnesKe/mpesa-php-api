@@ -1,5 +1,5 @@
 <?php
-namespace JohnesKe\MpesaPhpApi;
+namespace JohnesKe\MpesaPhpApi\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
@@ -7,8 +7,7 @@ use GuzzleHttp\Exception\ClientException;// for 400-level errors
 use GuzzleHttp\Exception\ServerException;// for 500-level errors
 use GuzzleHttp\Exception\BadResponseException;// for both (it's their superclass)
 
-class Token
-{
+class Token {
 
     protected $client;
 
@@ -46,5 +45,3 @@ class Token
     }
 
 }
-
-?>
