@@ -3,7 +3,8 @@
     "description": "Laravel Mpesa Php Api library",
     "keywords": [
         "mpesa",
-        "mpesa-api"
+        "mpesa-api",
+        "laravel"
     ],
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",
@@ -11,9 +12,9 @@
     "authors": [
         {
             "name": "Johnes Mecha",
-            "email": "hi@johnestech.com",
-            "homepage": "https://www.johnestech.com",
-            "role": "Developer"
+            "email": "jmecha09@gmail.com",
+            "homepage": "https://github.com/johnes-ke/mpesa-php-api",
+            "role": "Software Developer"
         }
     ],
     "require": {

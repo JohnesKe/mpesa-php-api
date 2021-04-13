@@ -12,19 +12,6 @@ use JohnesKe\MpesaPhpApi\Logging\Log;
 
 class MpesaPhpApiHttpClient
 {
-    const BASE_DOMAIN            = "safaricom.co.ke";
-
-    const BASE_SANDBOX_DOMAIN    = "https://sandbox." . self::BASE_DOMAIN;
-
-    const BASE_PRODUCTION_DOMAIN = "https://api." . self::BASE_DOMAIN;
-
-    protected $tokenUrl = '/oauth/v1/generate?grant_type=client_credentials';
-
-    protected $stkUrl   = '/mpesa/stkpush/v1/processrequest';
-
-    protected $baseDomain;
-
-    protected $tokenClient;
 
     /**
      * Guzzle client initialization.
@@ -81,28 +68,11 @@ class MpesaPhpApiHttpClient
      * and throw the necessary exception if there are any missing required
      * configurations.
      */
-    function __construct( $environment, $consumer_key , $consumer_secret ){
-
-        if($environment === 'sandbox') {
-            $this->baseDomain = self::BASE_SANDBOX_DOMAIN;
-
-        } elseif($environment === 'live') {
-            $this->baseDomain = self::BASE_PRODUCTION_DOMAIN;
-        }
-
-        $credentials = base64_encode($consumer_key.':'.$consumer_secret);
-
-        $this->tokenClient = new Client([
-            'base_uri' => $this->baseDomain,
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Basic '.$credentials
-            ]
-        ]);
+    function __construct(){
 
         $this->validateConfigurations();
 
-        $mode = config('mpesa-php-api.mode');
+        $mode = config('mpesa-php-api.mpesa_environment');
 
         $options = [
             'base_uri' => $this->base_url[$mode],
@@ -118,18 +88,6 @@ class MpesaPhpApiHttpClient
         $this->consumerSecret = config('mpesa-php-api.consumer_secret');
         $this->getAccessToken();
 
-    }
-
-    /**
-     * Check if it contains a route name and return full route or
-     * return the string assuming its a full URL.
-     *
-     * @param $urlConfig
-     * @return string
-     */
-    protected function setUrl($urlConfig)
-    {
-        return Route::has($urlConfig) ? route($urlConfig) : $urlConfig;
     }
 
     /**
@@ -174,7 +132,7 @@ class MpesaPhpApiHttpClient
      */
     protected function securityCredential($plaintext)
     {
-        $publicKey = file_get_contents(__DIR__.'/../cert.cer');
+        $publicKey = file_get_contents(__DIR__.'/../mpesa_certificate/cert.cer');
 
         openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
 

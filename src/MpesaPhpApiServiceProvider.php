@@ -4,6 +4,7 @@ namespace JohnesKe\MpesaPhpApi;
 use Illuminate\Support\ServiceProvider;
 
 use JohnesKe\MpesaPhpApi\Commands\RegisterC2BUrls;
+use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
 class MpesaPhpApiServiceProvider extends ServiceProvider
 {

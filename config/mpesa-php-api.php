@@ -139,18 +139,8 @@ return [
 
     'stk_push' => [
         'short_code'   => env('MPESA_STK_PUSH_SHORTCODE','174379'),
-        'callback_url' => env('MPESA_STK_PUSH_CALLBACK_URL', ''),
-
+        
         'pass_key'     => env('MPESA_STK_PUSH_PASS_KEY','bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'),
-
-        'transaction_type' => env('MPESA_STK_PUSH_TRANSACTION_TYPE','CustomerPayBillOnline'),
-        'amount'           => env('MPESA_STK_PUSH_AMOUNT','10'),
-        'phonenumber'      => env('MPESA_STK_PUSH_PHONENUMBER',''),
-        'account_reference' => env('MPESA_STK_PUSH_ACCOUNT_REFERENCE','test001'),
-
-        'transaction_description' => env('MPESA_STK_PUSH_TRANSACTION_DESCRIPTION','test001'),
-
-        'remarks'          => env('MPESA_STK_PUSH_REMARKS','test00l'),
     ],
 
     /*

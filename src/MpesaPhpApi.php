@@ -9,22 +9,14 @@ use JohnesKe\MpesaPhpApi\Services\C2b;
 use JohnesKe\MpesaPhpApi\Services\Reversal;
 use JohnesKe\MpesaPhpApi\Services\Stk;
 use JohnesKe\MpesaPhpApi\Services\Transaction;
-use JohnesKe\MpesaPhpApi\Services\Token;
 
 class MpesaPhpApi
 {
-
-  // Get Token
-  public function token()
-  {
-    $token = new Token($this->tokenClient, $this->tokenUrl);
-    return $token->getToken();
-  }
-
+  
   /**
    * Initiate a business to business transaction.
    *
-   * @return B2B
+   * @return B2b
    */
   public function b2b()
   {
@@ -34,11 +26,11 @@ class MpesaPhpApi
   /**
    * Initiate a business to customer transaction.
    *
-   * @return B2C
+   * @return B2c
    */
   public function b2c()
   {
-    return new B2C();
+    return new B2c();
   }
 
   /**
@@ -86,9 +78,9 @@ class MpesaPhpApi
    *
    * @return Stk
    */
-  public function Stk_push()
+  public function stk_push($mobileNo, $amount, $description, $accountReference, $callbackURL)
   {
-    return new Stk();
+    return new Stk($mobileNo, $amount, $description, $accountReference, $callbackURL);
   }
 
 }
