@@ -1,49 +1,49 @@
 {
-    "name": "johnes-ke/mpesa-php-api",
-    "description": "Laravel Mpesa Php Api library",
-    "keywords": [
-        "mpesa",
-        "mpesa-api",
-        "laravel"
-    ],
-    "homepage": "https://github.com/johnes-ke/mpesa-php-api",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Johnes Mecha",
-            "email": "jmecha09@gmail.com",
-            "homepage": "https://github.com/johnes-ke/mpesa-php-api",
-            "role": "Software Developer"
-        }
-    ],
-    "require": {
-        "php": "^7.2",
-        "guzzlehttp/guzzle": "^6.2"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^8.0"
-    },
-    "autoload": {
-        "psr-4": {
-          "JohnesKe\\MpesaPhpApi\\": "src/"
-      }
+  "name": "johnes-ke/mpesa-php-api",
+  "description": "Safaricom Mpesa Php API library for laraveL",
+  "keywords": [
+    "mpesa",
+    "mpesa-api",
+    "laravel"
+  ],
+  "homepage": "https://github.com/johnes-ke/mpesa-php-api",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Johnes Mecha",
+      "email": "jmecha09@gmail.com",
+      "homepage": "https://github.com/johnes-ke/mpesa-php-api",
+      "role": "Software Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.2",
+    "guzzlehttp/guzzle": "^6.2"
   },
-  "autoload-dev": {
-        "psr-4": {
-            "JohnesKe\\MpesaPhpApi\\Tests\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "JohnesKe\\MpesaPhpApi\\MpesaPhpApiServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "require-dev": {
+    "phpunit/phpunit": "^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "JohnesKe\\MpesaPhpApi\\": "src/"
+    }
+},
+"autoload-dev": {
+    "psr-4": {
+        "JohnesKe\\MpesaPhpApi\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  },
+  "extra": {
+    "laravel": {
+        "providers": [
+            "JohnesKe\\MpesaPhpApi\\MpesaPhpApiServiceProvider"
+        ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

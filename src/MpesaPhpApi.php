@@ -3,7 +3,7 @@
 namespace JohnesKe\MpesaPhpApi;
 
 use JohnesKe\MpesaPhpApi\Services\B2b;
-use JohnesKe\MpesaPhpApi\Services\B2C;
+use JohnesKe\MpesaPhpApi\Services\B2c;
 use JohnesKe\MpesaPhpApi\Services\Balance;
 use JohnesKe\MpesaPhpApi\Services\C2b;
 use JohnesKe\MpesaPhpApi\Services\Reversal;
@@ -78,9 +78,9 @@ class MpesaPhpApi
    *
    * @return Stk
    */
-  public function stk_push($mobileNo, $amount, $description, $accountReference, $callbackURL)
+  public function stk_push($mobileNo, $amount, $description, $accountReference)
   {
-    return new Stk($mobileNo, $amount, $description, $accountReference, $callbackURL);
+    return new Stk($mobileNo, $amount, $description, $accountReference);
   }
 
 }

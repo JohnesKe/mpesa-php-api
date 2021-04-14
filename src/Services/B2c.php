@@ -4,7 +4,7 @@ namespace JohnesKe\MpesaPhpApi\Services;
 
 use JohnesKe\MpesaPhpApi\MpesaPhpApiHttpClient;
 
-class B2C extends MpesaPhpApiHttpClient
+class B2c extends MpesaPhpApiHttpClient
 {
     /**
      * Safaricom APIs B2C endpoint.

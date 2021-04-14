@@ -33,15 +33,23 @@ class Stk extends MpesaPhpApiHttpClient{
    */
   protected $passKey;
 
+  /**
+   * The callback url where the mpesa api will send the result back from stkpush.
+   *
+   * @var string
+   */
+  protected $callBackUrl;
+
    
-  public function __construct($mobileNo, $amount, $description, $accountReference, $callbackURL){
+  public function __construct($mobileNo, $amount, $description, $accountReference){
 
     parent::__construct();
 
     $this->shortCode   = config('mpesa-php-api.stk_push.short_code');
     $this->passKey     = config('mpesa-php-api.stk_push.pass_key');
+    $this->callBackUrl = config('mpesa-php-api.stk_push.callback_url');
 
-    $this->push($mobileNo, $amount, $description, $accountReference, $callbackURL);
+    $this->push($mobileNo, $amount, $description, $accountReference, $this->callBackUrl);
   
   }
             

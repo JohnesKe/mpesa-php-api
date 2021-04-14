@@ -83,8 +83,8 @@ return [
     */
 
     'c2b_url' => [
-        'confirmation' => env('MPESA_C2B_CONFIRMATION_URL', ''),
-        'validation' => env('MPESA_C2B_VALIDATION_URL', ''),
+      'confirmation' => env('MPESA_C2B_CONFIRMATION_URL', ''),
+      'validation' => env('MPESA_C2B_VALIDATION_URL', ''),
     ],
 
     /*
@@ -139,6 +139,8 @@ return [
 
     'stk_push' => [
         'short_code'   => env('MPESA_STK_PUSH_SHORTCODE','174379'),
+
+        'callback_url' => env('MPESA_STK_PUSH_CALLBACK_URL',''),
         
         'pass_key'     => env('MPESA_STK_PUSH_PASS_KEY','bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'),
     ],
