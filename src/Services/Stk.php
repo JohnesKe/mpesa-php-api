@@ -2,6 +2,7 @@
 namespace JohnesKe\MpesaPhpApi\Services;
 
 use JohnesKe\MpesaPhpApi\MpesaPhpApiHttpClient;
+use Illuminate\Support\Str;
 
 class Stk extends MpesaPhpApiHttpClient{
 
@@ -101,8 +102,8 @@ class Stk extends MpesaPhpApiHttpClient{
       'PhoneNumber' => $mobileNo,
       'CallBackURL' => $callbackURL,
       'AccountReference' => $accountReference,
-      'TransactionDesc' => str_limit($description, 20, ''),
-      'Remark'          => str_limit($description, 20, ''),
+      'TransactionDesc' => Str::limit($description, 20),
+      'Remark'          => Str::limit($description, 20),
     ];
 
     return $this->call($this->stkEndpoint, ['json' => $parameters]);
