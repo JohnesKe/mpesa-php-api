@@ -18,7 +18,7 @@ class Stk extends MpesaPhpApiHttpClient{
    *
    * @var string
    */
-  protected $statusEndPoint = 'mpesa/stkpushquery/v1/query';
+  protected $stkStatusEndPoint = 'mpesa/stkpushquery/v1/query';
 
   /**
    * Business short code that will receive the money.
@@ -42,7 +42,7 @@ class Stk extends MpesaPhpApiHttpClient{
   protected $callBackUrl;
 
    
-  public function __construct($mobileNo, $amount, $description, $accountReference){
+  public function __construct(){
 
     parent::__construct();
 
@@ -50,8 +50,6 @@ class Stk extends MpesaPhpApiHttpClient{
     $this->passKey     = config('mpesa-php-api.stk_push.pass_key');
     $this->callBackUrl = config('mpesa-php-api.stk_push.callback_url');
 
-    $this->push($mobileNo, $amount, $description, $accountReference, $this->callBackUrl);
-  
   }
             
   /**
@@ -60,11 +58,10 @@ class Stk extends MpesaPhpApiHttpClient{
   * @param string $mobileNo
   * @param string $amount default KES 10
   * @param string $description
-  * @param string $callbackURL
   * @param string $accountReference
   * @return mixed
   */
-  protected function push($mobileNo, $amount = 10, $description, $accountReference, $callbackURL)
+  protected function request($mobileNo, $amount = 10, $description, $accountReference)
   {
     // Validate mobile no
     if (empty($mobileNo)) {
@@ -74,17 +71,27 @@ class Stk extends MpesaPhpApiHttpClient{
 
     if (empty($description)) {
       throw new \InvalidArgumentException(
-        'Transaction Description info has not been set');
+        'Mpesa Transaction Description info has not been set');
     }
 
     if (empty($accountReference)) {
       throw new \InvalidArgumentException(
-        'Account Reference info has not been set');
+        'Mpesa Account Reference info has not been set');
     }
 
-    if (empty($callbackURL)) {
+    if (empty($this->callBackUrl)) {
       throw new \InvalidArgumentException(
-        'CallBackURL has not been set');
+        'Mpesa CallBackURL has not been set');
+    }
+
+    if (empty($this->shortCode)) {
+      throw new \InvalidArgumentException(
+        'Mpesa ShortCode has not been set');
+    }
+
+    if (empty($this->passKey)) {
+      throw new \InvalidArgumentException(
+        'Mpesa PassKey has not been set');
     }
 
     $timestamp = date('YmdHis');
@@ -100,7 +107,7 @@ class Stk extends MpesaPhpApiHttpClient{
       'PartyA' => $mobileNo,
       'PartyB' => $this->shortCode,
       'PhoneNumber' => $mobileNo,
-      'CallBackURL' => $callbackURL,
+      'CallBackURL' => $this->callBackUrl,
       'AccountReference' => $accountReference,
       'TransactionDesc' => Str::limit($description, 20),
       'Remark'          => Str::limit($description, 20),
@@ -121,7 +128,7 @@ class Stk extends MpesaPhpApiHttpClient{
     //validate the params
     if (empty($checkoutRequestId)) {
       throw new \InvalidArgumentException(
-        'CheckoutRequestID is required');
+        'Mpesa CheckoutRequestID is required');
     }
 
     $timestamp = date('YmdHis');
@@ -135,7 +142,7 @@ class Stk extends MpesaPhpApiHttpClient{
       'CheckoutRequestID' => $checkoutRequestId,
     ];
 
-    return $this->call($this->statusEndPoint, ['json' => $parameters]);
+    return $this->call($this->$stkStatusEndPoint, ['json' => $parameters]);
   }
 
 }
