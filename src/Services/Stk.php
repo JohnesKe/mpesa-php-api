@@ -61,7 +61,7 @@ class Stk extends MpesaPhpApiHttpClient{
   * @param string $accountReference
   * @return mixed
   */
-  protected function request($mobileNo, $amount = 10, $description, $accountReference)
+  public function request($mobileNo, $amount = 10, $description, $accountReference)
   {
     // Validate mobile no
     if (empty($mobileNo)) {
