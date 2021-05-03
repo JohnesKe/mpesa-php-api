@@ -42,15 +42,13 @@ class Stk extends MpesaPhpApiHttpClient{
   protected $callBackUrl;
 
    
-  public function __construct($mobileNo, $amount, $description, $accountReference){
+  public function __construct(){
 
     parent::__construct();
 
     $this->shortCode   = config('mpesa-php-api.stk_push.short_code');
     $this->passKey     = config('mpesa-php-api.stk_push.pass_key');
     $this->callBackUrl = config('mpesa-php-api.stk_push.callback_url');
-
-    $this->request($mobileNo, $amount, $description, $accountReference);
 
   }
             
@@ -63,7 +61,7 @@ class Stk extends MpesaPhpApiHttpClient{
   * @param string $accountReference
   * @return mixed
   */
-  protected function request($mobileNo, $amount = 10, $description, $accountReference)
+  public function request($mobileNo, $amount = 10, $description, $accountReference)
   {
     // Validate mobile no
     if (empty($mobileNo)) {

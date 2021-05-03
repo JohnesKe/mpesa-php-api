@@ -80,7 +80,10 @@ class MpesaPhpApi
    */
   public function stk_push($mobileNo, $amount, $description, $accountReference)
   {
-    return new Stk($mobileNo, $amount, $description, $accountReference);
+    
+    $stk = new Stk();
+
+    return $stk->request($mobileNo, $amount, $description, $accountReference);
   }
 
 }
