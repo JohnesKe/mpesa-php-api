@@ -86,4 +86,11 @@ class MpesaPhpApi
     return $stk->request($mobileNo, $amount, $description, $accountReference);
   }
 
+  public function stk_transaction_status($checkoutRequestId){
+
+    $stk = new Stk();
+
+    return $stk->transactionStatus($checkoutRequestId);
+  }
+
 }
