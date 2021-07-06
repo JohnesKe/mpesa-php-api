@@ -150,22 +150,6 @@ class MpesaPhpApiHttpClient
     }
 
     /**
-     * Generate encrypted security credential.
-     *
-     * @param $plaintext
-     * @return string
-     * @internal param null|string $password
-     */
-    protected function securityCredential($plaintext)
-    {
-      $publicKey = file_get_contents(__DIR__.'/../mpesa_certificate/cert.cer');
-
-      openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
-
-      return base64_encode($encrypted);
-    }
-
-    /**
      * Make API calls to Safaricom MPESA APIs.
      *
      * @param string $url

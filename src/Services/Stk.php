@@ -142,7 +142,7 @@ class Stk extends MpesaPhpApiHttpClient{
       'CheckoutRequestID' => $checkoutRequestId,
     ];
 
-    return $this->call($this->$stkStatusEndPoint, ['json' => $parameters]);
+    return $this->call($this->stkStatusEndPoint, ['json' => $parameters]);
   }
 
 }

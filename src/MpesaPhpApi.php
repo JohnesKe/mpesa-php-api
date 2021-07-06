@@ -58,9 +58,12 @@ class MpesaPhpApi
    *
    * @return Reversal
    */
-  public function reversal()
+  public function reversal($transactionId, $amount, $remarks, $shortCode, $occasion)
   {
-    return new Reversal();
+
+    $reversal = new Reversal();
+
+    return $reversal->reverse($transactionId, $amount, $remarks, $shortCode, $occasion);
   }
 
   /**

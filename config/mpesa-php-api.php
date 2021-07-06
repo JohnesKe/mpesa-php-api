@@ -66,7 +66,7 @@ return [
     'initiator' => [
         'name' => env('MPESA_INITIATOR_NAME', ''),
         'credential' => env('MPESA_INITIATOR_CREDENTIAL', ''),
-        'short_code' => env('MPESA_INITIATOR_SHORTCODE', ''),
+        'short_code' => env('MPESA_INITIATOR_SHORTCODE', '174379'),
         'type' => env('MPESA_INITIATOR_TYPE', 'paybill'),
     ],
 

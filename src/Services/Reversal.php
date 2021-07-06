@@ -3,6 +3,7 @@
 namespace JohnesKe\MpesaPhpApi\Services;
 
 use JohnesKe\MpesaPhpApi\MpesaPhpApiHttpClient;
+use Illuminate\Support\Str;
 
 class Reversal extends MpesaPhpApiHttpClient {
 
@@ -48,45 +49,34 @@ class Reversal extends MpesaPhpApiHttpClient {
     public function __construct()
     {
         parent::__construct();
+
+        $this->validateURLsConfigurations();
+
         $this->initiatorName = config('mpesa-php-api.initiator.name');
-        $this->securityCredential = $this->securityCredential(config('mpesa-php-api.initiator.credential'));
 
-        $this->resultURL = $this->setUrl(config('mpesa-php-api.result_url.reversal'));
-        $this->queueTimeoutURL = $this->setUrl(config('mpesa-php-api.queue_timeout_url.reversal'));
+        $this->securityCredential = $this->encryptedSecurityCredential(
+            config('mpesa-php-api.initiator.credential'));
+
+        $this->resultURL = config('mpesa-php-api.result_url.reversal');
+
+        $this->queueTimeoutURL = config('mpesa-php-api.queue_timeout_url.reversal');
     }
 
     /**
-     * Set initiator other than the one in the laravel-daraja config file.
+     * Generate encrypted security credential.
      *
-     * @param string $initiatorName
-     * @param string $securityCredential
+     * @param $plaintext
+     * @return string
+     * @internal param null|string $password
      */
-    public function setInitiator($initiatorName, $securityCredential)
+    protected function encryptedSecurityCredential($plaintext)
     {
-        $this->initiatorName = $initiatorName;
-        $this->securityCredential = $this->securityCredential($securityCredential);
-    }
 
-    /**
-     * Set the url that will handle the timeout response from the
-     * MPESA Reversal API.
-     *
-     * @param string $url
-     */
-    public function setQueueTimeoutURL($url)
-    {
-        $this->queueTimeoutURL = $url;
-    }
+      $publicKey = file_get_contents(__DIR__.'\mpesa_certificate\cert.cer');
 
-    /**
-     * Set the url that will handle the result of the transaction
-     * from the MPESA Reversal API.
-     *
-     * @param string $url
-     */
-    public function setResultURL($url)
-    {
-        $this->resultURL = $url;
+      openssl_public_encrypt($plaintext, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
+
+      return base64_encode($encrypted);
     }
 
     /**
@@ -101,20 +91,51 @@ class Reversal extends MpesaPhpApiHttpClient {
      */
     public function reverse($transactionId, $amount, $remarks, $shortCode = null, $occasion = '')
     {
+
         $parameters = [
             'Initiator' => $this->initiatorName,
             'SecurityCredential' => $this->securityCredential,
             'CommandID' => 'TransactionReversal',
             'TransactionID' => $transactionId,
             'Amount' => $amount,
-            'ReceiverParty' => is_null($shortCode) ? config('mpesa-php-api.initiator.short_code') : $shortCode,
+            'ReceiverParty' => is_null($shortCode) ? 
+              config('mpesa-php-api.initiator.short_code') : $shortCode,
             'RecieverIdentifierType' => '4',
             'ResultURL' => $this->resultURL,
             'QueueTimeoutURL' => $this->queueTimeoutURL,
-            'Remarks' => str_limit($remarks, 100, ''),
-            'Occasion' => str_limit($occasion, 100, ''),
+            'Remarks' => Str::limit($remarks, 100),
+            'Occasion' => Str::limit($occasion, 100),
         ];
 
         return $this->call($this->reversalEndPoint, ['json' => $parameters]);
+    }
+
+    /**
+     * Validate URLs configurations.
+     */
+    protected function validateURLsConfigurations()
+    {
+      // Validate keys
+      if (empty(config('mpesa-php-api.result_url.reversal'))) {
+          throw new \InvalidArgumentException('Mpesa Reversal Result URL has not been set.');
+      }
+
+      if (empty(config('mpesa-php-api.queue_timeout_url.reversal'))) {
+          throw new \InvalidArgumentException('Mpesa Reversal Queue Timeout URL has not been set');
+      }
+
+      if (empty(config('mpesa-php-api.initiator.short_code'))) {
+          throw new \InvalidArgumentException('Mpesa Initiator Shortcode has not been set');
+      }
+
+      if (empty(config('mpesa-php-api.initiator.name'))) {
+          throw new \InvalidArgumentException('Mpesa Initiator name has not been set');
+      }
+
+      if (empty(config('mpesa-php-api.initiator.credential'))) {
+          throw new \InvalidArgumentException('Mpesa Initiator Credentials has not been set');
+      }
+
+
     }
 }
