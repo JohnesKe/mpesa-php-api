@@ -1,13 +1,20 @@
 <?php
 require '../vendor/autoload.php';
-require 'config.php';
 
 use JohnesKe\MpesaPhpApi\Mpesa;
 
-$mpesa = new Mpesa(MPESA_ENV, MPESA_CONSUMER_KEY , MPESA_CONSUMER_SECRET);
+    // Looing for .env at the root directory
+    $dotenv = Dotenv\Dotenv::createUnsafeImmutable('../');
+    $dotenv->load();
 
-$token = $mpesa->token();
+    $mpesa = new Mpesa(
+        getenv('MPESA_ENVIRONMENT'), 
+        getenv('MPESA_CONSUMER_KEY'),
+        getenv('MPESA_CONSUMER_SECRET')
+    );
 
-echo "Mpesa Token --> ".$token;
+    $token = $mpesa->token();
+
+    echo "Mpesa Token --> ".$token;
 
 ?>

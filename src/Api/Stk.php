@@ -1,11 +1,8 @@
 <?php
-namespace JohnesKe\MpesaPhpApi;
+namespace JohnesKe\MpesaPhpApi\Api;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;      // for 400-level errors
-use GuzzleHttp\Exception\ServerException;      // for 500-level errors
-use GuzzleHttp\Exception\BadResponseException; // for both (it's their superclass)
+use GuzzleHttp\Exception\ClientException;
 
 class Stk
 {
@@ -75,21 +72,17 @@ class Stk
 
             $data_string = json_encode($Data);
 
+            //$response = $this->client->request('GET', $this->token_url);
+
             $response = $this->stkClient->post( $this->stkUrl, ['body' => $data_string ] );
 
             $resp = $response->getBody()->getContents();
 
             return $resp; 
 
-        } catch (ClientException | ServerException | BadResponseException $e) {
-            // recover + log with monolog
-            echo Psr7\str($e->getRequest());
-            echo Psr7\str($e->getResponse());
-
-        } catch(\Exception $e){
-          // recover + slightly different log with monolog
-          echo $e->getMessage();
-
+        } catch (ClientException $e) {
+            echo Psr7\Message::toString($e->getRequest());
+            echo Psr7\Message::toString($e->getResponse());
         }    
         
     }

@@ -1,1 +1,1 @@
-"# M-pesa PHP API Implemented using guzzlehttp" 
+"# M-pesa PHP API for Laravel Php Framework" 

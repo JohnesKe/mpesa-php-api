@@ -1,9 +1,9 @@
 {
     "name": "johnes-ke/mpesa-php-api",
-    "description": "M-pesa PHP API Implemented using guzzlehttp library",
+    "description": "M-pesa PHP API for Laravel Php Framework",
     "keywords": [
         "mpesa",
-        "mpesaapi"
+        "api"
     ],
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",
@@ -12,20 +12,21 @@
         {
             "name": "Johnes Mecha",
             "email": "hi@johnestech.com",
-            "homepage": "https://www.johnestech.com",
+            "homepage": "https://johnestech.com",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^7.2",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0",
+        "vlucas/phpdotenv" : "^5.4.1"
     },
     "autoload": {
         "psr-4": {
-          "JohnesKe\\MpesaPhpApi\\": "src/"
+          "JohnesKe\\MpesaPhpApi\\": "src"
       }
   },
   "autoload-dev": {
@@ -39,7 +40,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "JohnesKe\\MpesaPhpApi\\MpesaPhpApiServiceProvider"
+                "JohnesKe\\MpesaPhpApi\\MpesaApiServiceProvider"
             ]
         }
     },

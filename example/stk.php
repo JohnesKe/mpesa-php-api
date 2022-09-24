@@ -1,29 +1,26 @@
 <?php
 require '../vendor/autoload.php';
-require 'config.php';
 
 use JohnesKe\MpesaPhpApi\Mpesa;
 
-$mpesa = new Mpesa( MPESA_ENV,MPESA_CONSUMER_KEY,MPESA_CONSUMER_SECRET );
+$mpesa = new Mpesa(getenv('MPESA_ENVIRONMENT'),getenv('MPESA_CONSUMER_KEY'),getenv('MPESA_CONSUMER_SECRET'));
 
 $token = $mpesa->token();
 
 echo "Mpesa Token --> ".$token;
 echo "<br/>";
 
-$stkResponse = $mpesa->stkRequest( 
-                                    $token,
-                                    BUSINESS_SHORT_CODE,
-                                    LIPA_NA_MPESA_PASS_KEY,
-                                    TRANSACTION_TYPE,
-                                    AMOUNT,
-                                    PHONENUMBER,
-                                    BUSINESS_SHORT_CODE,
-                                    PHONENUMBER,
-                                    CALL_BACK_URL,
-                                    ACCOUNT_REFERENCE,
-                                    TRX_DESCRIPTION,
-                                    REMaRKS
+$stkResponse = $mpesa->stkRequest( $token, getenv('BUSINESS_SHORT_CODE'),
+                                    getenv('LIPA_NA_MPESA_PASS_KEY'),
+                                    getenv('TRANSACTION_TYPE'),
+                                    getenv('AMOUNT'),
+                                    getenv('PHONENUMBER'),
+                                    getenv('BUSINESS_SHORT_CODE'),
+                                    getenv('PHONENUMBER'),
+                                    getenv('CALL_BACK_URL'),
+                                    getenv('ACCOUNT_REFERENCE'),
+                                    getenv('TRX_DESCRIPTION'),
+                                    getenv('REMARKS'),
                                   );
 
     //convert json to php objects

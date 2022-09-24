@@ -2,6 +2,7 @@
 namespace JohnesKe\MpesaPhpApi;
 
 use GuzzleHttp\Client;
+use JohnesKe\MpesaPhpApi\Api\Stk;
 
 class Mpesa
 {

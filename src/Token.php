@@ -1,14 +1,10 @@
 <?php
 namespace JohnesKe\MpesaPhpApi;
 
-use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;// for 400-level errors
-use GuzzleHttp\Exception\ServerException;// for 500-level errors
-use GuzzleHttp\Exception\BadResponseException;// for both (it's their superclass)
+use GuzzleHttp\Exception\ClientException;
 
-class Token
-{
+class Token {
 
     protected $client;
 
@@ -22,27 +18,21 @@ class Token
     }
 
     public function getToken(){
-       
-       try {
-            $response = $this->client->get($this->token_url);
+
+        try {
+            $response = $this->client->request('GET', $this->token_url);
+
             $resp = $response->getBody()->getContents();
 
             //convert json to php objects
             $result_1 = json_decode($resp);
 
-            return $Token = $result_1->access_token; 
+            return $result_1->access_token;
 
-        } catch (ClientException | ServerException | BadResponseException $e) {
-            // recover + log with monolog
-            echo Psr7\str($e->getRequest());
-            echo Psr7\str($e->getResponse());
-
-        } catch(\Exception $e){
-          // recover + slightly different log with monolog
-          echo Psr7\str($e->getRequest());
-          echo Psr7\str($e->getResponse());
-        }    
-        
+        } catch (ClientException $e) {
+            echo Psr7\Message::toString($e->getRequest());
+            echo Psr7\Message::toString($e->getResponse());
+        }
     }
 
 }
