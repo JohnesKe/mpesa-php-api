@@ -12,12 +12,12 @@ class MpesaApiServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config/mpesa.php' => config_path('mpesa.php'),
-        ], 'config');
+        ], 'mpesa-api-config');
 
         if (! class_exists('CreateMpesaPhpApiTable')) {
             $this->publishes([
                 __DIR__.'/../database/migrations/create_mpesa_php_api_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_mpesa_php_api_table.php'),
-            ], 'migrations');
+            ], 'mpesa-api-migrations');
         }
 
         // $this->publishes([
