@@ -1,45 +1,48 @@
 {
     "name": "johnes-ke/mpesa-php-api",
-    "description": "M-pesa Daraje Php API for Laravel Framework",
-    "keywords": ["mpesa","api","laravel","framework"],
+    "description": "M-pesa PHP API Implemented using guzzlehttp library",
+    "keywords": [
+        "mpesa",
+        "mpesaapi"
+    ],
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Johnes Mecha",
-            "email": "jmecha09@gmail.com",
-            "homepage": "https://johnestech.com",
-            "role": "Full Stack Developer"
+            "email": "hi@johnestech.com",
+            "homepage": "https://www.johnestech.com",
+            "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.1",
-        "guzzlehttp/guzzle": "^7.2"
+        "php": "^7.2",
+        "guzzlehttp/guzzle": "^6.2"
     },
     "require-dev": {
-        "vlucas/phpdotenv" : "^5.6.0"
+        "phpunit/phpunit": "^8.0"
     },
     "autoload": {
         "psr-4": {
-          "src\\": "src/"
+          "JohnesKe\\MpesaPhpApi\\": "src/"
       }
+  },
+  "autoload-dev": {
+        "psr-4": {
+            "JohnesKe\\MpesaPhpApi\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "laravel": {
             "providers": [
-                "JohnesKe\\MpesaPhpApi\\MpesaApiServiceProvider"
+                "JohnesKe\\MpesaPhpApi\\MpesaPhpApiServiceProvider"
             ]
         }
     },
-    "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
