@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## M-pesa PHP API FOR LARAVEL
 
 This package provides you with a simple tool to make requests to Safaricom Mpesa APIs so that you can focus on the development of your awesome application.
@@ -100,3 +101,6 @@ If you discover any security related issues, please send an email to jmecha09@gm
 instead of using the issue tracker.
 
 [link-safaricom-developer]: https://developer.safaricom.co.ke/ 
+=======
+"# M-pesa PHP API for Laravel Php Framework" 
+>>>>>>> master
