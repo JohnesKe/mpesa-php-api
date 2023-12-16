@@ -21,7 +21,7 @@ php artisan vendor:publish --tag=mpesa-php-api-config
 php artisan vendor:publish --tag=mpesa-php-api-migrations
 ```
 
-Fill in all your production Mpesa API details. Here are the env variables for quick copy paste. For the `MPESA_ENVIRONMENT` use `live` as the value. 
+Fill in all your production Mpesa API details in the `.env` file. Here are the env variables for quick copy paste. For the `MPESA_ENVIRONMENT` use `live` as the value for production. 
 
 ```
 MPESA_CONSUMER_KEY=
@@ -33,7 +33,6 @@ MPESA_ENVIRONMENT=
 MPESA_C2B_STK_SHORTCODE=
 
 LIPA_NA_MPESA_PASS_KEY=
-
 
 ```
 

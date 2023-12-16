@@ -1,12 +1,8 @@
 <?php
     require '../vendor/autoload.php';
-    require '../vendor/autoload.php';
-
-    use JohnesKe\MpesaPhpApi\MpesaPhpApi;
+    
     use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-    // Looking for .env.example at the root directory
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.example');
     // Looking for .env.example at the root directory
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.example');
     $dotenv->load();
