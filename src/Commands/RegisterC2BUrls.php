@@ -3,7 +3,6 @@
 namespace JohnesKe\MpesaPhpApi\Commands;
 
 use Illuminate\Console\Command;
-use JohnesKe\MpesaPhpApi\Facade\MpesaPhpApi;
 
 class RegisterC2BUrls extends Command
 {
@@ -36,10 +35,10 @@ class RegisterC2BUrls extends Command
      */
     public function handle()
     {
-        $confirmation = config('mpesa-php-api.c2b_url.confirmation');
-        $validation = config('mpesa-php-api.c2b_url.validation');
+        //$confirmation = config('mpesa-php-api.c2b_url.confirmation');
+        //$validation = config('mpesa-php-api.c2b_url.validation');
 
-        MpesaPhpApi::c2b()->registerUrls($confirmation, $validation);
-        $this->info('URLs registered successfully');
+        //MpesaPhpApi::register_c2b_urls($confirmation, $validation);
+        //$this->info('URLs registered successfully');
     }
 }

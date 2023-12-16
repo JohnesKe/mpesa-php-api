@@ -1,33 +1,30 @@
 <?php
     require '../vendor/autoload.php';
+    require '../vendor/autoload.php';
 
+    use JohnesKe\MpesaPhpApi\MpesaPhpApi;
     use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
     // Looking for .env.example at the root directory
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.example');
+    // Looking for .env.example at the root directory
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.example');
     $dotenv->load();
 
-    $mpesa = new MpesaPhpApi();
-    
-    $token = $mpesa->init( 
+    $mpesa = new MpesaPhpApi( 
                             getenv('MPESA_ENVIRONMENT'),
                             getenv('MPESA_CONSUMER_KEY'),
                             getenv('MPESA_CONSUMER_SECRET'),
-                            getenv('BUSINESS_SHORT_CODE'),
+                            getenv('MPESA_C2B_STK_SHORTCODE'),
                             getenv('LIPA_NA_MPESA_PASS_KEY'),
                         );
-    
-    echo "Mpesa Token --> ".$token;
 
-    $stkResponse = $mpesa->stkPushRequest(
-                            getenv('AMOUNT'),
-                            getenv('PHONENUMBER'),
-                            getenv('BUSINESS_SHORT_CODE'),
-                            getenv('PHONENUMBER'),
-                            getenv('CALL_BACK_URL'),
-                            getenv('ACCOUNT_REFERENCE'),
-                            getenv('TRX_DESCRIPTION'),
-                        );
+    $stkResponse = $mpesa->stkPushRequest($amount,
+                        $phoneNumber,
+                        $callBackUrl,
+                        $accountReference,
+                        $transactionRef,
+                    );
 
     //convert json to php objects
     $result = json_decode($stkResponse);
@@ -43,5 +40,5 @@
     echo "<br/>Merchant Request ID --> ".$merchantRequestID;
     echo "<br/>Checkout Request ID--> ".$checkoutRequestID;
     echo "<br/>Customer Message --> ".$CustomerMessage;
-
+    
 ?>

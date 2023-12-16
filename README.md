@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-## M-pesa PHP API FOR LARAVEL
+## M-pesa PHP API FOR LARAVEL FRAMEWORK
 
 This package provides you with a simple tool to make requests to Safaricom Mpesa APIs so that you can focus on the development of your awesome application.
 
@@ -7,65 +6,34 @@ This package provides you with a simple tool to make requests to Safaricom Mpesa
 
 Install via composer
 ```bash
-composer require johnes-ke/mpesa-php-api v1.0.1-beta
-```
-
-### Register Service Provider
-
-**Note! This and next step are optional if you use laravel>=5.5 with package
-auto discovery feature.**
-
-Add service provider to `config/app.php` in `providers` section
-```php
-JohnesKe\MpesaPhpApi\MpesaPhpApiServiceProvider::class,
-```
-
-### Register Facade
-
-Register package facade in `config/app.php` in `aliases` section
-```php
-JohnesKe\MpesaPhpApi\Facade\MpesaPhpApi::class,
+composer require johnes-ke/mpesa-php-api
 ```
 
 ### Publish Configuration File
 
 ```bash
-php artisan vendor:publish --provider="JohnesKe\MpesaPhpApi\MpesaPhpApiServiceProvider" --tag="config"
+php artisan vendor:publish --tag=mpesa-php-api-config
+```
+
+### Publish Database Migration File
+
+```bash
+php artisan vendor:publish --tag=mpesa-php-api-migrations
 ```
 
 Fill in all your production Mpesa API details. Here are the env variables for quick copy paste. For the `MPESA_ENVIRONMENT` use `live` as the value. 
 
 ```
-MPESA_CONSUMER_SECRET=
 MPESA_CONSUMER_KEY=
+
+MPESA_CONSUMER_SECRET=
+
 MPESA_ENVIRONMENT=
 
-MPESA_STK_PUSH_SHORTCODE=
-MPESA_STK_PUSH_PASS_KEY=
-MPESA_STK_PUSH_CALLBACK_URL=
+MPESA_C2B_STK_SHORTCODE=
 
-MPESA_C2B_CONFIRMATION_URL=
-MPESA_C2B_VALIDATION_URL=
+LIPA_NA_MPESA_PASS_KEY=
 
-MPESA_INITIATOR_NAME=
-MPESA_INITIATOR_CREDENTIAL=
-MPESA_INITIATOR_SHORTCODE=
-MPESA_INITIATOR_TYPE=
-
-MPESA_B2C_QUEUE_TIMEOUT_URL=
-MPESA_B2B_QUEUE_TIMEOUT_URL=
-MPESA_REVERSAL_QUEUE_TIMEOUT_URL=
-MPESA_BALANCE_QUEUE_TIMEOUT_URL=
-MPESA_TRANSACTION_STATUS_QUEUE_TIMEOUT_URL=
-
-MPESA_B2C_RESULT_URL=
-MPESA_B2B_RESULT_URL=
-MPESA_REVERSAL_RESULT_URL=
-MPESA_BALANCE_RESULT_URL=
-MPESA_TRANSACTION_STATUS_RESULT_URL=
-
-MPESA_LOGS_ENABLED=
-MPESA_LOGS_LEVEL=
 
 ```
 
@@ -73,26 +41,42 @@ MPESA_LOGS_LEVEL=
 
 If you have not created your Safaricom Daraja Mpesa API application yet you can create one at [Safaricom Developer][link-safaricom-developer]
 
-Each Mpesa API except Oauth has been implemented as a class on its own which you can use in your code.
-
-
-``` php
-
-$mpesa_api = new MpesaPhpApi();
-$mpesa_api->stk_push('2547********', '10', 'Product description', 'Product Reference');
-
-```
-
-If you prefer using the facade
+Example code to try
 
 ``` php
-MpesaPhpApi::stk_push('2547********', '10', 'Product description', 'Product Reference');
-```
 
-If you will be using the C2B Api you can easily register the validation and confirmation URLs through artisan command.
+use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-``` bash
-# php artisan mpesa-php-api:register-c2b-urls
+    $mpesa = new MpesaPhpApi( 
+                            getenv('MPESA_ENVIRONMENT'),
+                            getenv('MPESA_CONSUMER_KEY'),
+                            getenv('MPESA_CONSUMER_SECRET'),
+                            getenv('MPESA_C2B_STK_SHORTCODE'),
+                            getenv('LIPA_NA_MPESA_PASS_KEY'),
+                        );
+
+    $stkResponse = $mpesa->stkPushRequest($amount,
+                            $phoneNumber,
+                            $callBackUrl,
+                            $accountReference,
+                            $transactionRef,
+                        );
+
+    //convert json to php objects
+    $result = json_decode($stkResponse);
+
+    $ResponseCode        = $result->ResponseCode;
+    $ResponseDescription = $result->ResponseDescription;
+    $merchantRequestID   = $result->MerchantRequestID;
+    $checkoutRequestID   = $result->CheckoutRequestID;
+    $CustomerMessage     = $result->CustomerMessage;
+        
+    echo "<br/>Response Code --> ".$ResponseCode;
+    echo "<br/>Response Desc --> ".$ResponseDescription;
+    echo "<br/>Merchant Request ID --> ".$merchantRequestID;
+    echo "<br/>Checkout Request ID--> ".$checkoutRequestID;
+    echo "<br/>Customer Message --> ".$CustomerMessage;
+
 ```
 
 ## Security
@@ -101,6 +85,3 @@ If you discover any security related issues, please send an email to jmecha09@gm
 instead of using the issue tracker.
 
 [link-safaricom-developer]: https://developer.safaricom.co.ke/ 
-=======
-"# M-pesa PHP API for Laravel Php Framework" 
->>>>>>> master
