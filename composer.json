@@ -35,10 +35,7 @@
         "laravel": {
             "providers": [
                 "JohnesKe\\MpesaPhpApi\\ServiceProvider"
-            ],
-            "aliases": {
-                "MpesaPhpApi": "JohnesKe\\MpesaPhpApi\\Facade"
-            }
+            ]
         }
     },
     "config": {
