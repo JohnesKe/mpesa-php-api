@@ -19,5 +19,4 @@ class MpesaPhpApi extends Facade
         return 'MpesaPhpApi';
     }
 
-
 }

@@ -1,27 +1,22 @@
 {
     "name": "johnes-ke/mpesa-php-api",
-    "description": "M-pesa PHP API Implemented using guzzlehttp library",
-    "keywords": [
-        "mpesa",
-        "mpesaapi"
-    ],
+    "description": "Safaricom Daraja M-pesa API for laravel framework",
+    "keywords": ["laravel","mpesa","billing"],
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Johnes Mecha",
-            "email": "hi@johnestech.com",
-            "homepage": "https://www.johnestech.com",
-            "role": "Developer"
+            "email": "jmecha09@gmail.com"
         }
     ],
     "require": {
-        "php": "^7.2",
-        "guzzlehttp/guzzle": "^6.2"
+        "php": "^8.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^10.1",
+        "vlucas/phpdotenv": "16.3.1"
     },
     "autoload": {
         "psr-4": {
@@ -39,9 +34,15 @@
     "extra": {
         "laravel": {
             "providers": [
-                "JohnesKe\\MpesaPhpApi\\MpesaPhpApiServiceProvider"
-            ]
+                "JohnesKe\\MpesaPhpApi\\ServiceProvider"
+            ],
+            "aliases": {
+                "MpesaPhpApi": "JohnesKe\\MpesaPhpApi\\Facade"
+            }
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true

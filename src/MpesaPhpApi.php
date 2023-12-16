@@ -2,98 +2,65 @@
 
 namespace JohnesKe\MpesaPhpApi;
 
-use JohnesKe\MpesaPhpApi\Services\B2b;
-use JohnesKe\MpesaPhpApi\Services\B2c;
-use JohnesKe\MpesaPhpApi\Services\Balance;
-use JohnesKe\MpesaPhpApi\Services\C2b;
-use JohnesKe\MpesaPhpApi\Services\Reversal;
-use JohnesKe\MpesaPhpApi\Services\Stk;
-use JohnesKe\MpesaPhpApi\Services\Transaction;
+use JohnesKe\MpesaPhpApi\Api\Stk;
+use JohnesKe\MpesaPhpApi\Api\Token;
 
 class MpesaPhpApi
 {
+
+  //Initiate the API
+  public function init(
+                        $environment,
+                        $consumer_key,
+                        $consumer_secret,
+                        $businessShortCode,
+                        $lipaNaMpesaPassKey
+                      ){
+
+    $mpesa = new Token(
+                        $environment,
+                        $consumer_key,
+                        $consumer_secret,
+                        $businessShortCode,
+                        $lipaNaMpesaPassKey
+                      );
+
+    return $mpesa->getToken();
+  }
   
   /**
-   * Initiate a business to business transaction.
-   *
-   * @return B2b
-   */
-  public function b2b()
-  {
-    return new B2b();
-  }
-
-  /**
-   * Initiate a business to customer transaction.
-   *
-   * @return B2c
-   */
-  public function b2c()
-  {
-    return new B2c();
-  }
-
-  /**
-   * Initiate a balance enquiry.
-   *
-   * @return Balance
-   */
-  public function balance()
-  {
-    return new Balance();
-  }
-
-  /**
-   * Initialize a customer to business transaction.
-   *
-   * @return C2b
-   */
-  public function c2b()
-  {
-    return new C2b();
-  }
-
-  /**
-   * Initiate a transaction reversal.
-   *
-   * @return Reversal
-   */
-  public function reversal($transactionId, $amount, $remarks, $shortCode, $occasion)
-  {
-
-    $reversal = new Reversal();
-
-    return $reversal->reverse($transactionId, $amount, $remarks, $shortCode, $occasion);
-  }
-
-  /**
-   * Initiate a transaction status check.
-   *
-   * @return Transaction
-   */
-  public function transaction()
-  {
-    return new Transaction();
-  }
-
-  /**
-   * Initiate a LIPA NA MPESA ONLINE transaction using STK push.
+   * Initiate a LIPA NA MPESA STK push transaction.
    *
    * @return Stk
    */
-  public function stk_push($mobileNo, $amount, $description, $accountReference)
-  {
+  public function stkPushRequest(
+                                  $amount,
+                                  $partyA,
+                                  $partyB,
+                                  $phoneNumber,
+                                  $callBackUrl,
+                                  $accountReference,
+                                  $transactionDescription
+                                ){
     
     $stk = new Stk();
 
-    return $stk->request($mobileNo, $amount, $description, $accountReference);
+    $response = $stk->stkPushRequest(
+                                  $amount,
+                                  $partyA,
+                                  $partyB,
+                                  $phoneNumber,
+                                  $callBackUrl,
+                                  $accountReference,
+                                  $transactionDescription
+                                );
+    return $response;
   }
 
-  public function stk_transaction_status($checkoutRequestId){
-
+  public function stk_transaction_status($checkoutRequestID){
     $stk = new Stk();
-
-    return $stk->transactionStatus($checkoutRequestId);
+    $response = $stk->stkPushQuery($checkoutRequestID);
+    return $response;
   }
 
 }
