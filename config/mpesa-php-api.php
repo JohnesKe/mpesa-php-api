@@ -138,6 +138,9 @@ return [
     */
 
     'stk_push' => [
+
+        'transaction_type' => env('MPESA_STK_PUSH_TRANSACTION_TYPE','CustomerPayBillOnline'),
+
         'short_code'   => env('MPESA_STK_PUSH_SHORTCODE','174379'),
 
         'callback_url' => env('MPESA_STK_PUSH_CALLBACK_URL',''),

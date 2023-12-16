@@ -1,92 +1,57 @@
 <?php
 namespace JohnesKe\MpesaPhpApi\Api;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;
+use JohnesKe\MpesaPhpApi\Helpers\Config;
+use JohnesKe\MpesaPhpApi\Helpers\Network;
 
 class Stk
 {
+    use Network,Config;
 
-    protected $stkClient;
-    protected $stkUrl;
-    protected $businessShortCode;
-    protected $lipaNaMpesaPassKey;
-    protected $transactionType;
-    protected $amount;
-    protected $partyA;
-    protected $partyB;
-    protected $phoneNumber;
-    protected $callBackUrl;
-    protected $accountReference;
-    protected $transactionDescription;
-    protected $remarks;
+    private $stkUrl = '/mpesa/stkpush/v1/processrequest';
+    private $stkQuery = '/mpesa/stkpushquery/v1/query';
 
-    public function __construct($stkClient,$stkUrl,$businessShortCode,
-                       $lipaNaMpesaPassKey,$transactionType,
-                       $amount,$partyA,$partyB,$phoneNumber,
-                       $callBackUrl,$accountReference,$trxDescription,
-                       $remarks){
-
-        $this->stkClient              = $stkClient;
-        $this->stkUrl                 = $stkUrl;
-        $this->businessShortCode      = $businessShortCode;
-        $this->lipaNaMpesaPassKey     = $lipaNaMpesaPassKey;
-        $this->transactionType        = $transactionType;
-        $this->amount                 = $amount;
-        $this->partyA                 = $partyA;
-        $this->partyB                 = $partyB;
-        $this->phoneNumber            = $phoneNumber;
-        $this->callBackUrl            = $callBackUrl;
-        $this->accountReference       = $accountReference;
-        $this->transactionDescription = $trxDescription;
-        $this->remarks                = $remarks;
-
-    }
-
-    public function stkPushRequest(){
-
-       try {
-                    
-            $timestamp ='20'.date("ymdhis");
-
-            $password  = base64_encode(
-                                       $this->businessShortCode.
-                                       $this->lipaNaMpesaPassKey.
-                                       $timestamp
-                                   );
-         
-            $Data = array(
-                'BusinessShortCode' => $this->businessShortCode,
-                'Password'         => $password,
-                'Timestamp'        => $timestamp,
-                'TransactionType'  => $this->transactionType,
-                'Amount'           => $this->amount,
-                'PartyA'           => $this->partyA,
-                'PartyB'           => $this->partyB,
-                'PhoneNumber'      => $this->phoneNumber,
-                'CallBackURL'      => $this->callBackUrl,
-                'AccountReference' => $this->accountReference,
-                'TransactionDesc'  => $this->transactionDescription,
-                'Remark'           => $this->remarks
-            );
-
-            $data_string = json_encode($Data);
-
-            //$response = $this->client->request('GET', $this->token_url);
-
-            $response = $this->stkClient->post( $this->stkUrl, ['body' => $data_string ] );
-
-            $resp = $response->getBody()->getContents();
-
-            return $resp; 
-
-        } catch (ClientException $e) {
-            echo Psr7\Message::toString($e->getRequest());
-            echo Psr7\Message::toString($e->getResponse());
-        }    
+    public function stkPushRequest($amount,$partyA,$partyB,$phoneNumber,$callBackUrl,
+                                    $accountReference,$transactionDescription){
+       
+        $timestamp = date("Ymdhis");
+        $password  = base64_encode(Config::$shortCode.Config::$passKey.$timestamp);
         
+        $Data = array(
+            'BusinessShortCode' => Config::$shortCode,
+            'Password'         => $password,
+            'Timestamp'        => $timestamp,
+            'TransactionType'  => "CustomerPayBillOnline",
+            'Amount'           => $amount,
+            'PartyA'           => $partyA,
+            'PartyB'           => $partyB,
+            'PhoneNumber'      => $phoneNumber,
+            'CallBackURL'      => $callBackUrl,
+            'AccountReference' => $accountReference,
+            'TransactionDesc'  => $transactionDescription
+        );
+
+        $response = Network::postRequest($this->stkUrl,json_encode($Data));
+
+        return json_decode($response);
     }
 
+    public function stkPushQuery($checkoutRequestID){
+
+        $timestamp = date("Ymdhis");
+        $password  = base64_encode(Config::$shortCode.Config::$passKey.$timestamp);
+        
+        $Data = array(
+            'BusinessShortCode' => Config::$shortCode,
+            'Password'         => $password,
+            'Timestamp'        => $timestamp,
+            'CheckoutRequestID'  => $checkoutRequestID
+        );
+
+        $response = Network::postRequest($this->stkQuery,json_encode($Data));
+
+        return json_decode($response);
+    }
 }
 
 ?>
