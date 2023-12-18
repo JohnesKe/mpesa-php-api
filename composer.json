@@ -5,12 +5,6 @@
     "homepage": "https://github.com/johnes-ke/mpesa-php-api",
     "type": "library",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Johnes Mecha",
-            "email": "jmecha09@gmail.com"
-        }
-    ],
     "require": {
         "php": "^8.1"
     },
