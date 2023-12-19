@@ -3,24 +3,36 @@
     
     use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-    // Looking for .env.example at the root directory
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.example');
-    $dotenv->load();
+    $MPESA_CONSUMER_KEY = 'SU3oHOJFCmpGsyoe6U49hAPG0dy7rqT5';
 
-    $mpesa = new MpesaPhpApi( 
-                            getenv('MPESA_ENVIRONMENT'),
-                            getenv('MPESA_CONSUMER_KEY'),
-                            getenv('MPESA_CONSUMER_SECRET'),
-                            getenv('MPESA_C2B_STK_SHORTCODE'),
-                            getenv('LIPA_NA_MPESA_PASS_KEY'),
-                        );
+    $MPESA_CONSUMER_SECRET = 'IttCad6e37CksH2X';
 
-    $stkResponse = $mpesa->stkPushRequest($amount,
-                        $phoneNumber,
-                        $callBackUrl,
-                        $accountReference,
-                        $transactionRef,
-                    );
+    $MPESA_ENVIRONMENT = 'sandbox';
+
+    $MPESA_C2B_STK_SHORTCODE = '174379';
+
+    $LIPA_NA_MPESA_PASS_KEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919';
+
+    $mpesa = new MpesaPhpApi($MPESA_ENVIRONMENT,$MPESA_CONSUMER_KEY,$MPESA_CONSUMER_SECRET);
+
+    $accessToken = $mpesa->getToken();
+
+    $amount = '1';
+    $phoneNumber = '254708377969';
+    $callBackUrl = 'https:://payments.extreamkenya.co.ke';
+    $accountReference = 'Test001';
+    $transactionRef = 'test';
+
+    $stkResponse = $mpesa->stkPushRequest(
+        $accessToken,
+        $MPESA_C2B_STK_SHORTCODE,
+        $LIPA_NA_MPESA_PASS_KEY,
+        $amount,
+        $phoneNumber,
+        $callBackUrl,
+        $accountReference,
+        $transactionRef,
+    );
 
     //convert json to php objects
     $result = json_decode($stkResponse);

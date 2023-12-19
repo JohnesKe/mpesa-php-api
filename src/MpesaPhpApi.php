@@ -1,6 +1,11 @@
 <?php
-
 namespace JohnesKe\MpesaPhpApi;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
+use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\RequestException;
 
 class MpesaPhpApi
 {
@@ -18,134 +23,161 @@ class MpesaPhpApi
 
   private $b2c_payment_request_url = '/mpesa/b2c/v1/paymentrequest';
 
-  private $shortcode;
-  private $passkey;
   private $baseDomain;
-  private $access_token;
+  private $consumerKey;
+  private $consumerSecret;
 
-  public function __construct($environment,$consumer_key,$consumer_secret,$shortcode,$passkey)
+  public function __construct($environment,$consumer_key,$consumer_secret)
   {
     if($environment === 'sandbox') {
       $this->baseDomain = $this->sandbox_domain;
-      $this->access_token = $this->getToken(base64_encode($consumer_key.':'.$consumer_secret));
-      $this->passkey = $passkey;
-      $this->shortcode = $shortcode;
+      $this->consumerKey = $consumer_key;
+      $this->consumerSecret = $consumer_secret;
     } elseif($environment === 'live') {
       $this->baseDomain = $this->production_domain;
-      $this->access_token = $this->getToken(base64_encode($consumer_key.':'.$consumer_secret));
-      $this->passkey = $passkey;
-      $this->shortcode = $shortcode;
+      $this->consumerKey = $consumer_key;
+      $this->consumerSecret = $consumer_secret;
     }
   }
 
   // Get Token
-  private function getToken($credentials)
+  public function getToken()
   {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $this->baseDomain.$this->tokenUrl);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer '.$credentials, 'Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $response = curl_exec($ch);
-    $info = curl_getinfo($ch);
-    curl_close($ch);
-  
-    $response = json_decode($response);
+    $credentials = base64_encode($this->consumerKey.':'.$this->consumerSecret);
 
-    if ($info["http_code"] == 200) {
-      return $response->access_token;
-    } else {
-      //Invalid Consumer key or secret
-      return $response;
-    }
+    $tokenClient = new Client([
+      'base_uri' => $this->baseDomain,
+      'headers' => [
+          'Accept' => 'application/json',
+          'Accept'       => 'application/json',
+          'Authorization' => 'Bearer '.$credentials
+      ]
+    ]);
+
+    // try {
+    //   $response = $tokenClient->request('GET', $this->tokenUrl);
+
+    //   $resp = $response->getBody()->getContents();
+
+    //   //convert json to php objects
+    //   $result_1 = json_decode($resp);
+
+    //   return $result_1->access_token;
+
+    // } catch (ClientException $e) {
+    //     echo Psr7\Message::toString($e->getRequest());
+    //     echo Psr7\Message::toString($e->getResponse());
+    // }
+
+    $promise = $tokenClient->requestAsync('GET', $this->tokenUrl);
+    $promise->then(
+        function (ResponseInterface $response) {
+
+            $code = $response->getStatusCode();
+
+            if($code === 200){
+              $resp = $response->getBody()->getContents();
+
+              //convert json to php objects
+              $result = json_decode($resp);
+
+              return $result->access_token;
+            }
+        },
+        function (RequestException $e) {
+            echo $e->getMessage() . "\n";
+            echo $e->getRequest()->getMethod();
+        }
+    );
   }
 
-  public function stkPushRequest($amount,$phoneNumber,$callBackUrl,
+  public function stkPushRequest($access_token,$shortcode,$passkey,$amount,$phoneNumber,$callBackUrl,
           $accountReference,$transactionDescription){
 
     $timestamp = date("Ymdhis");
-    $password  = base64_encode($this->shortcode.$this->passkey.$timestamp);
+    $password  = base64_encode($shortcode.$passkey.$timestamp);
 
     $data = array(
-        'BusinessShortCode' => $this->shortcode,
+        'BusinessShortCode' => $shortcode,
         'Password'         => $password,
         'Timestamp'        => $timestamp,
         'TransactionType'  => "CustomerPayBillOnline",
         'Amount'           => $amount,
         'PartyA'           => $phoneNumber,
-        'PartyB'           => $this->shortcode,
+        'PartyB'           => $shortcode,
         'PhoneNumber'      => $phoneNumber,
         'CallBackURL'      => $callBackUrl,
         'AccountReference' => $accountReference,
         'TransactionDesc'  => $transactionDescription
     );
 
-    $response = $this->postRequest($this->stkUrl,json_encode($data));
+    $response = $this->postRequest($access_token,$this->stkUrl,json_encode($data));
 
     return json_decode($response);
   }
 
-  public function stkPushQuery($checkoutRequestID){
+  public function stkPushQuery($access_token,$shortcode,$passkey,$checkoutRequestID){
 
     $timestamp = date("Ymdhis");
-    $password  = base64_encode($this->shortcode.$this->passkey.$timestamp);
+    $password  = base64_encode($shortcode.$passkey.$timestamp);
 
     $data = array(
-      'BusinessShortCode' => $this->shortcode,
+      'BusinessShortCode' => $shortcode,
       'Password'          => $password,
       'Timestamp'         => $timestamp,
       'CheckoutRequestID' => $checkoutRequestID
     );
 
-    $response = $this->postRequest($this->stkQuery, json_encode($data));
+    $response = $this->postRequest($access_token,$this->stkQuery, json_encode($data));
 
     return json_decode($response);
   }
 
-  public function c2b_paybill_online($amount,$phoneNumber,$billRefNumber){
+  public function c2b_paybill_online($access_token,$shortcode,$amount,$phoneNumber,$billRefNumber){
 
     $data = array(
-      'ShortCode'     => $this->shortcode,
+      'ShortCode'     => $shortcode,
       'CommandID'     => "CustomerPayBillOnline",
       'amount'        => $amount,
       'MSISDN'        => $phoneNumber,
       'BillRefNumber' => $billRefNumber
     );
 
-    $response = $this->postRequest($this->c2b_paybill_online_url,json_encode($data));
+    $response = $this->postRequest($access_token,$this->c2b_paybill_online_url,json_encode($data));
 
     return json_decode($response);
   }
 
-  public function register_c2b_urls($confirmUrl,$validationUrl){
+  public function register_c2b_urls($access_token,$shortcode,$confirmUrl,$validationUrl){
 
     $data = array(
-      'ShortCode'       => $this->shortcode,
+      'ShortCode'       => $shortcode,
       'ResponseType'    => "Completed",
       'ConfirmationURL' => $confirmUrl,
       'ValidationURL'   => $validationUrl
     );
 
-    $response = $this->postRequest($this->c2b_register_urls_url,json_encode($data));
+    $response = $this->postRequest($access_token,$this->c2b_register_urls_url,json_encode($data));
 
     return json_decode($response);
   }
 
-  public function c2b_customer_buy_goods($amount,$phoneNumber,$billRefNumber){
+  public function c2b_customer_buy_goods($access_token,$shortcode,$amount,$phoneNumber,$billRefNumber){
 
     $data = array(
-      'ShortCode' => $this->shortcode,
+      'ShortCode' => $shortcode,
       'CommandID' => "CustomerBuyGoodsOnline",
       'amount' => $amount,
       'MSISDN'   => $phoneNumber,
       'BillRefNumber' =>$billRefNumber,
     );
 
-    $response = $this->postRequest($this->c2b_customer_buy_goods_url,json_encode($data));
+    $response = $this->postRequest($access_token,$this->c2b_customer_buy_goods_url,json_encode($data));
 
     return json_decode($response);
   }
 
-  public function b2c_payment_request($initiatorName,$securityCredential,$commandID,
+  public function b2c_payment_request($access_token,$initiatorName,$securityCredential,$commandID,
                                       $amount,$b2c_shortcode,$phoneNumber,$remarks,$queueTimeOutUrl,
                                       $resultUrl,$occassion){
     
@@ -162,21 +194,33 @@ class MpesaPhpApi
       'Occassion' => $occassion
     );
 
-    $response = $this->postRequest($this->b2c_payment_request_url,json_encode($data));
+    $response = $this->postRequest($access_token,$this->b2c_payment_request_url,json_encode($data));
 
     return json_decode($response);
   }
 
-  private function postRequest($url,$data){
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $this->baseDomain.$url);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer '.$this->access_token, 'Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    $response     = curl_exec($ch);
-    curl_close($ch);
-    return $response;
+  private function postRequest($access_token,$url,$data){
+
+    $httpClient = new Client([
+      'base_uri' => $this->baseDomain,
+      'headers' => [
+          'Authorization' => 'Bearer '.$access_token,
+          'Content-Type' => 'application/json',
+          'Accept'       => 'application/json'
+      ]
+    ]);
+
+    try{
+        $response = $httpClient->post( $url, ['body' => $data ] );
+
+        $resp = $response->getBody()->getContents();
+
+        return $resp; 
+
+    } catch (ClientException $e) {
+        echo Psr7\Message::toString($e->getRequest());
+        echo Psr7\Message::toString($e->getResponse());
+    }
   }
 
 }
