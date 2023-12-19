@@ -44,22 +44,28 @@ Example code to try
 
 ``` php
 
-use JohnesKe\MpesaPhpApi\MpesaPhpApi;
+    use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-    $mpesa = new MpesaPhpApi( 
-                            getenv('MPESA_ENVIRONMENT'),
-                            getenv('MPESA_CONSUMER_KEY'),
-                            getenv('MPESA_CONSUMER_SECRET'),
-                            getenv('MPESA_C2B_STK_SHORTCODE'),
-                            getenv('LIPA_NA_MPESA_PASS_KEY'),
-                        );
+    $mpesa = new MpesaPhpApi(getenv('MPESA_ENVIRONMENT'),getenv('MPESA_CONSUMER_KEY'),getenv('MPESA_CONSUMER_SECRET'));
 
-    $stkResponse = $mpesa->stkPushRequest($amount,
-                            $phoneNumber,
-                            $callBackUrl,
-                            $accountReference,
-                            $transactionRef,
-                        );
+    $accessToken = $mpesa->getToken();
+
+    $amount = '1';
+    $phoneNumber = '2547********';
+    $callBackUrl = 'https:://example.com';
+    $accountReference = 'Test001';
+    $transactionRef = 'test';
+
+    $stkResponse = $mpesa->stkPushRequest(
+        $accessToken,
+        getenv('MPESA_C2B_STK_SHORTCODE'),
+        getenv('LIPA_NA_MPESA_PASS_KEY'),
+        $amount,
+        $phoneNumber,
+        $callBackUrl,
+        $accountReference,
+        $transactionRef,
+    );
 
     //convert json to php objects
     $result = json_decode($stkResponse);
