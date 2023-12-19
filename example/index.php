@@ -18,8 +18,8 @@
     $accessToken = $mpesa->getToken();
 
     $amount = '1';
-    $phoneNumber = '254708377969';
-    $callBackUrl = 'https:://payments.extreamkenya.co.ke';
+    $phoneNumber = '2547********';
+    $callBackUrl = 'https:://example.com';
     $accountReference = 'Test001';
     $transactionRef = 'test';
 
