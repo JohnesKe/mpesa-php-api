@@ -23,7 +23,7 @@
     $accountReference = 'Test001';
     $transactionRef = 'test';
 
-    $stkResponse = $mpesa->stkPushRequest(
+    $result = $mpesa->stkPushRequest(
         $accessToken,
         $MPESA_C2B_STK_SHORTCODE,
         $LIPA_NA_MPESA_PASS_KEY,
@@ -33,9 +33,6 @@
         $accountReference,
         $transactionRef,
     );
-
-    //convert json to php objects
-    $result = json_decode($stkResponse);
 
     $ResponseCode        = $result->ResponseCode;
     $ResponseDescription = $result->ResponseDescription;

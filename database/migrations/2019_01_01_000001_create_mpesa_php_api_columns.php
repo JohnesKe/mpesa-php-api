@@ -13,7 +13,7 @@ return new class extends Migration
     */
     public function up(): void
     {
-        Schema::create('mpesa_php_api', function (Blueprint $table) {
+        Schema::create('mpesa_payments', function (Blueprint $table) {
             $table->id();
             $table->string('response_code');
             $table->string('response_description');
@@ -35,6 +35,6 @@ return new class extends Migration
     */
     public function down(): void
     {
-        Schema::dropIfExists('mpesa_php_api');
+        Schema::dropIfExists('mpesa_payments');
     }
 };

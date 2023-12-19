@@ -4,8 +4,6 @@ namespace JohnesKe\MpesaPhpApi;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
-use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\RequestException;
 
 class MpesaPhpApi
 {
@@ -48,47 +46,21 @@ class MpesaPhpApi
     $tokenClient = new Client([
       'base_uri' => $this->baseDomain,
       'headers' => [
-          'Accept' => 'application/json',
-          'Accept'       => 'application/json',
-          'Authorization' => 'Bearer '.$credentials
+        'Accept' => 'application/json',
+        'Content-Type' => 'application/json',
+        'Authorization' => 'Basic '.$credentials
       ]
     ]);
 
-    // try {
-    //   $response = $tokenClient->request('GET', $this->tokenUrl);
-
-    //   $resp = $response->getBody()->getContents();
-
-    //   //convert json to php objects
-    //   $result_1 = json_decode($resp);
-
-    //   return $result_1->access_token;
-
-    // } catch (ClientException $e) {
-    //     echo Psr7\Message::toString($e->getRequest());
-    //     echo Psr7\Message::toString($e->getResponse());
-    // }
-
-    $promise = $tokenClient->requestAsync('GET', $this->tokenUrl);
-    $promise->then(
-        function (ResponseInterface $response) {
-
-            $code = $response->getStatusCode();
-
-            if($code === 200){
-              $resp = $response->getBody()->getContents();
-
-              //convert json to php objects
-              $result = json_decode($resp);
-
-              return $result->access_token;
-            }
-        },
-        function (RequestException $e) {
-            echo $e->getMessage() . "\n";
-            echo $e->getRequest()->getMethod();
-        }
-    );
+    try {
+      $response = $tokenClient->request('GET', $this->tokenUrl);
+      //convert json to php objects
+      $results = json_decode($response->getBody()->getContents());
+      return $results->access_token;
+    } catch (ClientException $e) {
+      echo Psr7\Message::toString($e->getRequest());
+      echo Psr7\Message::toString($e->getResponse());
+    }
   }
 
   public function stkPushRequest($access_token,$shortcode,$passkey,$amount,$phoneNumber,$callBackUrl,
@@ -204,22 +176,18 @@ class MpesaPhpApi
     $httpClient = new Client([
       'base_uri' => $this->baseDomain,
       'headers' => [
-          'Authorization' => 'Bearer '.$access_token,
-          'Content-Type' => 'application/json',
-          'Accept'       => 'application/json'
+        'Authorization' => 'Bearer '.$access_token,
+        'Content-Type' => 'application/json',
+        'Accept'       => 'application/json'
       ]
     ]);
 
     try{
-        $response = $httpClient->post( $url, ['body' => $data ] );
-
-        $resp = $response->getBody()->getContents();
-
-        return $resp; 
-
+      $response = $httpClient->post( $url, ['body' => $data ] );
+      return $response->getBody()->getContents(); 
     } catch (ClientException $e) {
-        echo Psr7\Message::toString($e->getRequest());
-        echo Psr7\Message::toString($e->getResponse());
+      echo Psr7\Message::toString($e->getRequest());
+      echo Psr7\Message::toString($e->getResponse());
     }
   }
 

@@ -37,7 +37,7 @@ class ServiceProvider extends LaravelServiceProvider
         //$this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         //about this package
-        AboutCommand::add('Mpesa Php Api', fn () => ['Version' => '2.0.1']);
+        AboutCommand::add('Mpesa Php Api', fn () => ['Version' => '2.0.4']);
     }
 
     /**

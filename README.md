@@ -1,10 +1,11 @@
-## M-pesa PHP API FOR LARAVEL FRAMEWORK
+# M-pesa PHP API FOR LARAVEL FRAMEWORK
 
 This package provides you with a simple tool to make requests to Safaricom Mpesa APIs so that you can focus on the development of your awesome application.
 
 ## Installation
 
 Install via composer
+
 ```bash
 composer require johnes-ke/mpesa-php-api
 ```
@@ -21,20 +22,10 @@ php artisan vendor:publish --tag=mpesa-php-api-config
 php artisan vendor:publish --tag=mpesa-php-api-migrations
 ```
 
-Fill in all your production Mpesa API details in the `.env` file. Here are the env variables for quick copy paste. For the `MPESA_ENVIRONMENT` use `live` as the value for production. 
+### IF YOU WANT TO GO LIVE/PRODUCTION READY
 
-```
-MPESA_CONSUMER_KEY=
-
-MPESA_CONSUMER_SECRET=
-
-MPESA_ENVIRONMENT=
-
-MPESA_C2B_STK_SHORTCODE=
-
-LIPA_NA_MPESA_PASS_KEY=
-
-```
+Copy the variables in the `.env.example`.  to the `.env` environment file .
+For the `MPESA_ENVIRONMENT` use `live` as the value for the production environment.
 
 ## Usage
 
@@ -44,9 +35,15 @@ Example code to try
 
 ``` php
 
+<?php
+
     use JohnesKe\MpesaPhpApi\MpesaPhpApi;
 
-    $mpesa = new MpesaPhpApi(getenv('MPESA_ENVIRONMENT'),getenv('MPESA_CONSUMER_KEY'),getenv('MPESA_CONSUMER_SECRET'));
+    $mpesa = new MpesaPhpApi(
+            config('mpesa-php-api.mpesa_environment'),
+            config('mpesa-php-api.consumer_key'),
+            config('mpesa-php-api.consumer_secret')
+        );
 
     $accessToken = $mpesa->getToken();
 
@@ -56,10 +53,11 @@ Example code to try
     $accountReference = 'Test001';
     $transactionRef = 'test';
 
-    $stkResponse = $mpesa->stkPushRequest(
+   // Stk Push Example
+    $result = $mpesa->stkPushRequest(
         $accessToken,
-        getenv('MPESA_C2B_STK_SHORTCODE'),
-        getenv('LIPA_NA_MPESA_PASS_KEY'),
+        config('mpesa-php-api.c2b_stk_short_code'),
+        config('mpesa-php-api.lipa_na_mpesa_pass_key'),
         $amount,
         $phoneNumber,
         $callBackUrl,
@@ -67,15 +65,13 @@ Example code to try
         $transactionRef,
     );
 
-    //convert json to php objects
-    $result = json_decode($stkResponse);
-
     $ResponseCode        = $result->ResponseCode;
     $ResponseDescription = $result->ResponseDescription;
     $merchantRequestID   = $result->MerchantRequestID;
     $checkoutRequestID   = $result->CheckoutRequestID;
     $CustomerMessage     = $result->CustomerMessage;
-        
+    
+    //Response   
     echo "<br/>Response Code --> ".$ResponseCode;
     echo "<br/>Response Desc --> ".$ResponseDescription;
     echo "<br/>Merchant Request ID --> ".$merchantRequestID;
@@ -86,7 +82,7 @@ Example code to try
 
 ## Security
 
-If you discover any security related issues, please send an email to jmecha09@gmail.com
+If you discover any security related issues, please send an email to `jmecha09@gmail.com`
 instead of using the issue tracker.
 
-[link-safaricom-developer]: https://developer.safaricom.co.ke/ 
+[link-safaricom-developer]: https://developer.safaricom.co.ke/
